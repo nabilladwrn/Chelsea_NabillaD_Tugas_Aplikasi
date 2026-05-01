@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    * {box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-deep:   #2c5282;
+      --blue-mid:    #4a8ab0;
+      --blue-light:  #b8d8f0;
+      --ink:         #1a2f45;
+      --muted:       #6a8aaa;
+      --border:      #cce0f0;
+      --receipt-bg:  #fffdf4;
+      --receipt-gold:#c8a850;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #b8d8f0;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(44,82,130,0.15) 0%, transparent 60%);
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(24px, 5vw, 64px) clamp(16px, 4vw, 40px) clamp(48px, 6vw, 80px);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .card {
+      width: 100%;
+      max-width: min(560px, calc(100vw - clamp(32px, 6vw, 80px) * 2));
+
+      /* Cow Pattern Bg */
+      background-image: url('https://wallpapercave.com/wp/wp13645618.jpg');
+      background-size: cover;
+      background-position: center;
+
+      border-radius: 28px;
+      border: 2.5px solid rgba(255,255,255,0.85);
+      padding: clamp(24px, 5%, 40px) clamp(16px, 5%, 36px) clamp(28px, 6%, 44px);
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 8px 40px rgba(44,82,130,0.18),
+        0 2px 8px  rgba(44,82,130,0.08);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.75);
+      border-radius: 26px;
+      z-index: 0;
+    }
+
+    .card > * { position: relative; z-index: 1; }
+
+    .title {
+      text-align: center;
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      font-style: italic;
+      color: #3a6fa0;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+      cursor: default;
+      -webkit-text-stroke: 0.5px #A9C5E0;
+      text-shadow:
+        -0.5px -0.5px 0 #A9C5E0,
+         0.5px -0.5px 0 #A9C5E0,
+        -0.5px  0.5px 0 #A9C5E0,
+         0.5px  0.5px 0 #A9C5E0;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: clamp(9px, 1.5vw, 12px);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-top: 6px;
+      background: linear-gradient(
+        90deg,
+        #7aaccc 0%,
+        #4a8ab0 30%,
+        #a0c8e0 55%,
+        #4a8ab0 80%,
+        #7aaccc 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nick-section {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .nick-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.92);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .nick-input:focus {
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(74,138,176,0.12);
+    }
+
+    .nick-input::placeholder { color: #aac0d4; }
+
+    .input-header {
+      margin-top: 26px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .items-row {
+      display: flex;
+      flex-wrap: wrap;   
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .item-box {
+      flex: 1 1 120px;    
+      min-width: 0;      
+      background: rgba(255,255,255,0.88);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(12px, 4%, 18px) clamp(10px, 3%, 14px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .item-box:hover {
+      border-color: #9ac8e4;
+      box-shadow: 0 4px 16px rgba(74,138,176,0.12);
+    }
+
+    /* Ganti emoji jadi img */
+    .item-img {
+      width: clamp(52px, 12vw, 80px);
+      height: clamp(52px, 12vw, 80px);
+      object-fit: contain;
+      user-select: none;
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      text-align: center;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .qty-input {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 6px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      background: rgba(255,255,255,0.96);
+      outline: none;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .qty-input:focus {
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(74,138,176,0.12);
+    }
+
+    .unit-select {
+      padding: 8px 4px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(255,255,255,0.96);
+      outline: none;
+      cursor: pointer;
+      min-width: 40px;
+      max-width: 56px;
+      flex-shrink: 0;
+      appearance: none;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .unit-select:focus { border-color: var(--blue-mid); }
+
+	.calc-btn {
+	  margin-top: 24px;
+	  width: 100%;
+	  padding: 14px;
+	  background: rgba(190, 214, 237, 0.5);
+	  color: rgba(255,255,255,0.6);
+	  font-family: 'DM Sans', sans-serif;
+	  font-size: 14px;
+	  font-weight: 700;
+	  letter-spacing: 1.4px;
+	  text-transform: uppercase;
+	  border: none;
+	  border-radius: 14px;
+	  cursor: not-allowed;
+	  transition: all 0.25s ease;
+	}
+
+    .calc-btn:hover {
+      background: rgba(190, 214, 237, 1);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    }
+	
+	.calc-btn.active {
+	  background: linear-gradient(135deg, #4a8ab0, #2c5282);
+	  color: #fff;
+	  cursor: pointer;
+	  box-shadow: 0 6px 20px rgba(44,82,130,0.35);
+	}
+  
+    .divider {
+      margin: 28px 0 0;
+      border: none;
+      border-top: 1.5px dashed #c0d8ec;
+    }
+
+    .receipt {
+      margin-top: 24px;
+      background: var(--receipt-bg);
+      border: 1.5px solid #ddd090;
+      border-radius: 16px;
+      padding: 24px 22px 20px;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      color: #3a3020;
+    }
+
+    .receipt-header {
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1.5px dashed var(--receipt-gold);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 3px 0;
+      gap: 8px;
+    }
+
+    .receipt-label { color: #6a5a30; flex-shrink: 0; }
+    .receipt-val   { text-align: right; color: #2a2010; word-break: break-word; }
+
+    .receipt-divider {
+      border: none;
+      border-top: 1px dashed var(--receipt-gold);
+      margin: 10px 0;
+    }
+
+    .receipt-total { font-size: 14px; }
+
+    .receipt-footer {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 11px;
+      color: #9a8a50;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="title">Converter</div>
+    <div class="subtitle">Milk &amp; Mineral Water Edition</div>
+
+    <div class="nick-section">
+      <div class="field-label">Your nickname</div>
+      <input class="nick-input" id="nickname" type="text" placeholder="Enter nickname (optional)" />
+    </div>
+
+    <div class="input-header">&#9830; Available Menu &#9830;</div>
+
+    <div class="items-row">
+      <div class="item-box">
+        <img class="item-img" src="images/milkconverter.jpeg" alt="Milk" />
+        <div class="item-name">Milk</div>
+        <div class="qty-row">
+          <input class="qty-input" id="milk-qty" type="number" min="0" value="0" />
+          <select class="unit-select" id="milk-unit">
+            <option value="liter">L</option>
+            <option value="kg">Kg</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="item-box">
+        <img class="item-img" src="images/waterconverter.jpeg" alt="Mineral Water" />
+        <div class="item-name">Mineral Water</div>
+        <div class="qty-row">
+          <input class="qty-input" id="water-qty" type="number" min="0" value="0" />
+          <select class="unit-select" id="water-unit">
+            <option value="liter">L</option>
+            <option value="kg">Kg</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" id="calcBtn" onclick="calculate()">Calculate Now</button>
+
+    <hr class="divider" />
+
+    <div class="receipt" id="receipt">
+      <div class="receipt-header">
+        &#9733; RECEIPT &#9733;<br>
+        <span style="font-size:11px; letter-spacing:1.5px;">~ kg and liter converter ~</span>
+      </div>
+
+      <div class="receipt-row">
+        <span class="receipt-label">Buyer name</span>
+        <span class="receipt-val" id="r-name">-</span>
+      </div>
+
+      <hr class="receipt-divider" />
+
+      <div class="receipt-row">
+        <span class="receipt-label">Items</span>
+        <span class="receipt-val" id="r-items">-</span>
+      </div>
+
+      <hr class="receipt-divider" />
+
+      <div class="receipt-row receipt-total">
+        <span class="receipt-label">Total weight</span>
+        <span class="receipt-val" id="r-kg">0.00 kg</span>
+      </div>
+      <div class="receipt-row receipt-total">
+        <span class="receipt-label">Total volume</span>
+        <span class="receipt-val" id="r-liter">0.00 L</span>
+      </div>
+
+      <div class="receipt-footer">&#9733; &#9733; &#9733; thank you &#9733; &#9733; &#9733;</div>
+    </div>
+
+  </div>
+<script>
+	  const MILK_DENSITY  = 1.03;
+	  const WATER_DENSITY = 1.0;
+
+	function toKgAndLiter(qty, unit, density) {
+    if (unit === 'liter') return { liter: qty, kg: qty * density };
+    return { kg: qty, liter: qty / density };
+	}
+
+	function calculate() {
+      const btn = document.getElementById('calcBtn');
+
+    if (!btn.classList.contains('active')) return;
+
+      const nick      = document.getElementById('nickname').value.trim();
+      const milkQty   = parseFloat(document.getElementById('milk-qty').value)  || 0;
+      const milkUnit  = document.getElementById('milk-unit').value;
+      const waterQty  = parseFloat(document.getElementById('water-qty').value) || 0;
+      const waterUnit = document.getElementById('water-unit').value;
+
+      const milk  = toKgAndLiter(milkQty,  milkUnit,  MILK_DENSITY);
+      const water = toKgAndLiter(waterQty, waterUnit, WATER_DENSITY);
+
+      const totalKg    = milk.kg    + water.kg;
+      const totalLiter = milk.liter + water.liter;
+
+    let items = 'No items';
+    if (milkQty > 0 && waterQty > 0) items = 'Milk, Mineral Water';
+    else if (milkQty  > 0)           items = 'Milk';
+    else if (waterQty > 0)           items = 'Mineral Water';
+
+      document.getElementById('r-name').textContent  = nick || '-';
+      document.getElementById('r-items').textContent = items;
+      document.getElementById('r-kg').textContent    = totalKg.toFixed(2)    + ' kg';
+      document.getElementById('r-liter').textContent = totalLiter.toFixed(2) + ' L';
+      document.getElementById('receipt').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+	}
+
+	function checkInputs() {
+      const milkQty  = parseFloat(document.getElementById('milk-qty').value)  || 0;
+      const waterQty = parseFloat(document.getElementById('water-qty').value) || 0;
+      const btn = document.getElementById('calcBtn');
+
+    if (milkQty > 0 || waterQty > 0) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+	  }
+	}
+
+	  document.getElementById('milk-qty').addEventListener('input', checkInputs);
+	  document.getElementById('water-qty').addEventListener('input', checkInputs);
+
+	  checkInputs();
+</script>
+</body>
+</html>
